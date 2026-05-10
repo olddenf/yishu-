@@ -1,0 +1,209 @@
+.container {
+  background-color: #F2EFE6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.collapse-area {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 80rpx;
+}
+
+.yao-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.yao-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.yao-line {
+  font-size: 48rpx;
+  color: #333;
+}
+
+.yao-mark {
+  position: absolute;
+  right: -30rpx;
+  font-size: 24rpx;
+  color: #C04851;
+}
+
+.yao-collapse {
+  animation: yao-collapse 0.8s ease-in forwards;
+}
+
+@keyframes yao-collapse {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-50%) scale(0.5); opacity: 0; }
+}
+
+.collapse-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 32rpx;
+  height: 32rpx;
+  background: #333;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.collapse-center.fade-radial {
+  animation: fade-radial 2s ease-out forwards;
+}
+
+@keyframes fade-radial {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+.stream-area {
+  position: relative;
+  width: 100%;
+  height: 300rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.number-stream {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+}
+
+.stream-number {
+  position: absolute;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: rgba(51, 51, 51, 0.3);
+}
+
+.number-stream {
+  animation: number-stream 3s linear forwards;
+}
+
+@keyframes number-stream {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.yi-text {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+}
+
+.yi-word {
+  position: absolute;
+  font-size: 48rpx;
+  color: rgba(51, 51, 51, 0.2);
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.float-up {
+  animation: float-up 2s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+}
+
+.loading-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8rpx;
+  margin-top: 20rpx;
+}
+
+.dot {
+  width: 8rpx;
+  height: 8rpx;
+  background: #333;
+  border-radius: 50%;
+}
+
+.dot-pulse {
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+.ink-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200rpx;
+  overflow: hidden;
+}
+
+.ink-gradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(51, 51, 51, 0.5), transparent);
+  filter: blur(10rpx);
+}
+
+.floating-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.float-dot {
+  position: absolute;
+  background: rgba(51, 51, 51, 0.2);
+  border-radius: 50%;
+}
+
+.float {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+
+.yao-rise {
+  animation: yao-rise 0.6s ease-out forwards;
+}
+
+@keyframes yao-rise {
+  0% { transform: translateY(30rpx); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="header">
+    <text class="cancel-btn" bindtap="goBack">取消</text>
+    <view class="progress-info">
+      <text class="progress-text">第 {{yaoIndex}} / 6 爻</text>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+      </view>
+    </view>
+    <text class="timer">{{timer}}</text>
+  </view>
+
+  <view class="yao-slots">
+    <view class="yao-slot {{yaoResults[5 - index] ? 'filled' : ''}}" wx:for="{{[0,1,2,3,4,5]}}" wx:key="index">
+      <view wx:if="{{yaoResults[5 - index]}}" 
+            class="yao-symbol yao-{{yaoResults[5 - index].type}} yao-rise">
+        <text class="yao-line">{{yaoResults[5 - index].symbol}}</text>
+        <text wx:if="{{yaoResults[5 - index].type === 'old_yang' || yaoResults[5 - index].type === 'old_yin'}}" 
+              class="yao-mark">{{yaoResults[5 - index].mark}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="coin-area">
+    <!-- 铜钱区域：有结果时保持显示结果 -->
+    <view class="coins-container {{showCoins ? '' : 'hidden'}}">
+      <view class="coin {{coinResults[0] ? 'coin-back' : 'coin-front'}} {{coinAnimating[0] ? 'coin-flipping' : ''}}">
+        <text>{{coinResults[0] ? '陰' : '陽'}}</text>
+      </view>
+      <view class="coin {{coinResults[1] ? 'coin-back' : 'coin-front'}} {{coinAnimating[1] ? 'coin-flipping' : ''}}">
+        <text>{{coinResults[1] ? '陰' : '陽'}}</text>
+      </view>
+      <view class="coin {{coinResults[2] ? 'coin-back' : 'coin-front'}} {{coinAnimating[2] ? 'coin-flipping' : ''}}">
+        <text>{{coinResults[2] ? '陰' : '陽'}}</text>
+      </view>
+    </view>
+
+    <!-- 点击提示：第一次显示"点击起卦"，之后显示"点击起下一爻"，第六卦不显示 -->
+    <view class="tap-hint {{isAnimating || yaoResults.length >= 6 ? 'hidden' : ''}}" 
+          wx:if="{{!isAnimating && yaoResults.length < 6}}" 
+          bindtap="castCoin">
+      <text class="hint-counter" wx:if="{{yaoResults.length === 0}}">第 {{yaoIndex}} 爻</text>
+      <text class="hint-text">{{yaoResults.length === 0 ? '点击起卦' : '点击起下一爻'}}</text>
+    </view>
+  </view>
+
+  <view class="footer-hint">
+    <text>铜钱翻转，阳多阴少</text>
+  </view>
+</view>

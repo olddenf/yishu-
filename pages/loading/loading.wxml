@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="collapse-area">
+    <view class="yao-container" id="collapsingYao">
+      <view wx:for="{{yaoResults}}" wx:key="index" 
+            class="yao-symbol yao-{{yaoResults[yaoResults.length - 1 - index].type}} yao-rise">
+        <text class="yao-line">{{yaoResults[yaoResults.length - 1 - index].symbol}}</text>
+        <text wx:if="{{yaoResults[yaoResults.length - 1 - index].mark}}" 
+              class="yao-mark">{{yaoResults[yaoResults.length - 1 - index].mark}}</text>
+      </view>
+    </view>
+    <view class="collapse-center fade-radial"></view>
+  </view>
+
+  <view class="stream-area">
+    <view class="number-stream">
+      <text wx:for="{{numberStream}}" wx:key="index" 
+            class="stream-number number-stream"
+            style="animation-delay: {{item.delay}}s; left: {{item.left}}%; top: {{item.top}}%;">
+        {{item.num}}
+      </text>
+    </view>
+    
+    <view class="yi-text">
+      <text wx:for="{{yiJingWords}}" wx:key="index"
+            class="yi-word float-up"
+            style="animation-delay: {{item.delay}}s; left: {{item.left}}%;">
+        {{item.word}}
+      </text>
+    </view>
+
+    <view class="loading-content">
+      <text class="loading-text">{{loadingText}}</text>
+      <view class="loading-dots">
+        <view class="dot dot-pulse" style="animation-delay: 0s"></view>
+        <view class="dot dot-pulse" style="animation-delay: 0.2s"></view>
+        <view class="dot dot-pulse" style="animation-delay: 0.4s"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="ink-bottom">
+    <view class="ink-gradient"></view>
+  </view>
+
+  <view class="floating-dots">
+    <view wx:for="{{floatingDots}}" wx:key="index"
+          class="float-dot float"
+          style="width: {{item.size}}rpx; height: {{item.size}}rpx; left: {{item.left}}%; top: {{item.top}}%; animation-delay: {{item.delay}}s;">
+    </view>
+  </view>
+</view>

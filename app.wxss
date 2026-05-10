@@ -1,0 +1,160 @@
+page {
+  background-color: #F2EFE6;
+  font-family: 'Noto Serif SC', serif;
+  color: #333333;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.bg-paper {
+  background-color: #F2EFE6;
+}
+
+.text-ink {
+  color: #333333;
+}
+
+.text-cinnabar {
+  color: #C04851;
+}
+
+.bg-cinnabar {
+  background-color: #C04851;
+}
+
+.font-xiaowei {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.font-serif {
+  font-family: 'Noto Serif SC', serif;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20rpx rgba(192, 72, 81, 0.3); }
+  50% { box-shadow: 0 0 40rpx rgba(192, 72, 81, 0.6); }
+}
+
+@keyframes coin-flip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(900deg); }
+  100% { transform: rotateY(1800deg); }
+}
+
+@keyframes yao-rise {
+  0% { transform: translateY(30rpx); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes paper-fall {
+  0% { transform: translateY(-100vh) rotate(-5deg); opacity: 0; }
+  60% { transform: translateY(10vh) rotate(2deg); opacity: 1; }
+  80% { transform: translateY(-5vh) rotate(-1deg); }
+  100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes seal-bounce {
+  0% { transform: scale(0) rotate(-15deg); }
+  60% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes number-appear {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes ink-spread {
+  0% { transform: scale(0); opacity: 0.8; filter: blur(0rpx); }
+  50% { opacity: 0.4; filter: blur(8rpx); }
+  100% { transform: scale(2); opacity: 0; filter: blur(20rpx); }
+}
+
+@keyframes yao-collapse {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-50%) scale(0.5); opacity: 0; }
+}
+
+@keyframes number-stream {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100rpx) scale(0.5); opacity: 0; }
+}
+
+@keyframes fade-radial {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.taiji-breath {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.cinnabar-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.yao-rise {
+  animation: yao-rise 0.6s ease-out forwards;
+}
+
+.paper-fall {
+  animation: paper-fall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.seal-bounce {
+  animation: seal-bounce 0.5s ease-out 0.8s forwards;
+  opacity: 0;
+}
+
+.number-appear {
+  animation: number-appear 0.4s ease-out forwards;
+}
+
+.yao-collapse {
+  animation: yao-collapse 0.8s ease-in forwards;
+}
+
+.number-stream {
+  animation: number-stream 3s linear forwards;
+}
+
+.dot-pulse {
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
+
+.float-up {
+  animation: float-up 2s ease-out forwards;
+}
+
+.fade-radial {
+  animation: fade-radial 2s ease-out forwards;
+}
+
+.ink-spread {
+  animation: ink-spread 1.5s ease-out forwards;
+}

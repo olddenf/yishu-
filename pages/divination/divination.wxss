@@ -1,0 +1,198 @@
+.container {
+  background-color: #F2EFE6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.cancel-btn {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.progress-info {
+  text-align: center;
+}
+
+.progress-text {
+  font-size: 26rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.progress-bar {
+  width: 200rpx;
+  height: 8rpx;
+  background-color: #e0e0e0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #C04851;
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+.timer {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.yao-slots {
+  position: fixed;
+  left: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 16rpx;
+}
+
+.yao-slot {
+  width: 160rpx;
+  height: 24rpx;
+  border-bottom: 4rpx dashed #ccc;
+}
+
+.yao-slot.filled {
+  border-bottom: none;
+}
+
+.yao-symbol {
+  width: 160rpx;
+  height: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.yao-line {
+  font-size: 36rpx;
+  color: #333;
+}
+
+.yao-mark {
+  position: absolute;
+  right: 20rpx;
+  font-size: 20rpx;
+  color: #C04851;
+}
+
+.coin-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40rpx;
+}
+
+.coins-container {
+  display: flex;
+  gap: 30rpx;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.coins-container:not(.hidden) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.coins-container.hidden {
+  display: none;
+}
+
+.coin {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.3);
+  perspective: 1000rpx;
+}
+
+.coin-front {
+  background: linear-gradient(145deg, #D4AF37, #B8860B);
+  color: #8B4513;
+}
+
+.coin-back {
+  background: linear-gradient(145deg, #8B4513, #654321);
+  color: #D4AF37;
+}
+
+.coin-flipping {
+  animation: coin-flip 0.8s ease-out forwards;
+}
+
+@keyframes coin-flip {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(900deg) scale(1.1);
+  }
+  100% {
+    transform: rotateY(1800deg) scale(1);
+  }
+}
+
+.tap-hint {
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.tap-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hint-counter {
+  font-size: 28rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.hint-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.footer-hint {
+  text-align: center;
+  padding: 40rpx;
+}
+
+.footer-hint text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.yao-rise {
+  animation: yao-rise 0.4s ease-out forwards;
+}
+
+@keyframes yao-rise {
+  0% { transform: translateY(20rpx); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

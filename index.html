@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>易数乾坤 - AI起卦彩票辅助</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #F2EFE6;
+            color: #333333;
+            overflow: hidden;
+        }
+        .page { display: none; }
+        .page.active { display: flex; }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+        .taiji-breath { animation: breathe 3s ease-in-out infinite; }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(192, 72, 81, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(192, 72, 81, 0.6); }
+        }
+        .cinnabar-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+        @keyframes coin-flip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(900deg); }
+            100% { transform: rotateY(1800deg); }
+        }
+        .coin-flipping { animation: coin-flip 1s ease-in-out forwards; }
+
+        @keyframes yao-rise {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .yao-rise { animation: yao-rise 0.6s ease-out forwards; }
+
+        @keyframes ink-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .ink-flow {
+            background: linear-gradient(90deg, #333333, #666666, #333333, #666666, #333333);
+            background-size: 200% 100%;
+            animation: ink-flow 2s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes ink-spread {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+                filter: blur(0px);
+            }
+            50% {
+                opacity: 0.4;
+                filter: blur(8px);
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+                filter: blur(20px);
+            }
+        }
+        .ink-spread {
+            animation: ink-spread 1.5s ease-out forwards;
+        }
+
+        @keyframes yao-draw {
+            0% {
+                stroke-dashoffset: 100;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+        .yao-draw {
+            stroke-dasharray: 100;
+            animation: yao-draw 0.8s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        .float-up {
+            animation: float-up 2s ease-out forwards;
+        }
+
+        @keyframes fade-radial {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        .fade-radial {
+            animation: fade-radial 2s ease-out forwards;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        .pulse-ring {
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+
+        @keyframes paper-fall {
+            0% { transform: translateY(-100vh) rotate(-5deg); opacity: 0; }
+            60% { transform: translateY(10vh) rotate(2deg); opacity: 1; }
+            80% { transform: translateY(-5vh) rotate(-1deg); }
+            100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        }
+        .paper-fall { animation: paper-fall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+        @keyframes seal-bounce {
+            0% { transform: scale(0) rotate(-15deg); }
+            60% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .seal-bounce { animation: seal-bounce 0.5s ease-out 0.8s forwards; opacity: 0; }
+
+        @keyframes number-appear {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .number-appear { animation: number-appear 0.4s ease-out forwards; }
+
+        @keyframes collapse {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50%) scale(0.5); opacity: 0; }
+        }
+        .yao-collapse { animation: collapse 0.8s ease-in forwards; }
+
+        @keyframes number-stream {
+            0% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .number-stream { animation: number-stream 3s linear forwards; }
+
+        @keyframes dot-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        .dot-pulse { animation: dot-pulse 1.5s ease-in-out infinite; }
+
+        .segment-control { position: relative; }
+        .segment-item.active { color: #C04851; }
+        .segment-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #C04851;
+        }
+
+        .yao-slot {
+            width: 80px;
+            height: 12px;
+            border-bottom: 2px dashed #ccc;
+            margin-bottom: 8px;
+        }
+        .yao-filled {
+            height: 12px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .yao-yang {
+            background: linear-gradient(90deg, #333 0%, #333 100%);
+            border-radius: 6px;
+        }
+        .yao-yin {
+            background: linear-gradient(90deg, #333 0%, #333 45%, transparent 45%, transparent 55%, #333 55%, #333 100%);
+            border-radius: 6px;
+        }
+        .yao-old-yang::after {
+            content: '○';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #C04851;
+            font-size: 10px;
+        }
+        .yao-old-yin::after {
+            content: '×';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #C04851;
+            font-size: 10px;
+        }
+
+        .coin {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 2px 10px rgba(255,255,255,0.2);
+        }
+        .coin-front {
+            background: linear-gradient(145deg, #D4AF37, #B8860B);
+            color: #8B4513;
+        }
+        .coin-back {
+            background: linear-gradient(145deg, #8B4513, #654321);
+            color: #D4AF37;
+        }
+
+        .ball {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3), inset 0 -3px 10px rgba(0,0,0,0.2);
+        }
+        .ball-red {
+            background: linear-gradient(145deg, #C04851, #8B0000);
+        }
+        .ball-blue {
+            background: linear-gradient(145deg, #4A90D9, #1E4A8F);
+        }
+
+        .seal {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #C04851;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #C04851;
+            transform: rotate(-5deg);
+            background: rgba(192, 72, 81, 0.1);
+        }
+
+        .risk-text {
+            font-size: 10px;
+            color: #999;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid #333;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+        }
+        .btn-ghost:hover {
+            background: #333;
+            color: #F2EFE6;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float { animation: float 2s ease-in-out infinite; }
+
+        .hidden { display: none !important; }
+        
+        /* Custom colors */
+        .bg-paper { background-color: #F2EFE6; }
+        .text-paper { color: #F2EFE6; }
+        .border-paper { border-color: #F2EFE6; }
+        
+        .bg-ink { background-color: #333333; }
+        .bg-ink\/5 { background-color: rgba(51, 51, 51, 0.05); }
+        .bg-ink\/20 { background-color: rgba(51, 51, 51, 0.2); }
+        .bg-ink\/30 { background-color: rgba(51, 51, 51, 0.3); }
+        .text-ink { color: #333333; }
+        .text-ink\/20 { color: rgba(51, 51, 51, 0.2); }
+        .text-ink\/30 { color: rgba(51, 51, 51, 0.3); }
+        .border-ink { border-color: #333333; }
+        
+        .bg-cinnabar { background-color: #C04851; }
+        .text-cinnabar { color: #C04851; }
+        .border-cinnabar { border-color: #C04851; }
+        
+        /* Custom fonts */
+        .font-xiaowei { font-family: 'ZCOOL XiaoWei', serif; }
+        .font-serif { font-family: 'Noto Serif SC', serif; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="app" class="w-full h-full max-w-md mx-auto relative overflow-hidden bg-paper">
+
+        <!-- 页面A: 首页-择法 -->
+        <div id="pageA" class="page active flex-col items-center justify-between h-full py-8 px-6">
+            <div class="text-center mt-8">
+                <h1 class="text-3xl font-xiaowei text-ink tracking-widest">易数乾坤</h1>
+                <p class="text-sm text-gray-500 mt-2 tracking-wider">AI起卦 · 命数推演</p>
+            </div>
+
+            <div class="segment-control flex gap-8 mt-8">
+                <button class="segment-item active relative pb-2 text-lg tracking-wide transition-all" data-type="ssq" onclick="switchLottery('ssq')">双色球</button>
+                <button class="segment-item relative pb-2 text-lg tracking-wide text-gray-400 transition-all" data-type="dlt" onclick="switchLottery('dlt')">大乐透</button>
+            </div>
+
+            <div class="flex-1 flex items-center justify-center w-full">
+                <div id="taijiBtn" class="taiji-breath relative cursor-pointer group" onclick="startDivination()">
+                    <svg width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg">
+                        <circle cx="100" cy="100" r="95" fill="#F2EFE6" stroke="#333" stroke-width="3"/>
+                        <path d="M100 5 A95 95 0 0 1 100 195 A47.5 47.5 0 0 1 100 100 A47.5 47.5 0 0 0 100 5" fill="#333"/>
+                        <circle cx="100" cy="47.5" r="12" fill="#F2EFE6"/>
+                        <circle cx="100" cy="152.5" r="12" fill="#333"/>
+                        <g class="opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <text x="100" y="25" text-anchor="middle" font-size="10" fill="#C04851" class="font-serif">☰</text>
+                            <text x="175" y="105" text-anchor="middle" font-size="10" fill="#C04851" class="font-serif">☱</text>
+                            <text x="100" y="185" text-anchor="middle" font-size="10" fill="#C04851" class="font-serif">☴</text>
+                            <text x="25" y="105" text-anchor="middle" font-size="10" fill="#C04851" class="font-serif">☶</text>
+                        </g>
+                    </svg>
+                    <div class="absolute inset-0 rounded-full cinnabar-glow pointer-events-none"></div>
+                    <div id="inkOverlay" class="absolute inset-0 pointer-events-none overflow-hidden rounded-full">
+                        <div id="inkDrop" class="absolute w-10 h-10 bg-ink/30 rounded-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-6">
+                <p class="text-cinnabar text-lg mb-4 tracking-wide animate-pulse">轻触太极，起卦问天</p>
+                <div class="risk-text leading-relaxed">
+                    <p>本程序不保证中奖，仅供娱乐参考</p>
+                    <p class="mt-1">禁止未成年人购买彩票</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面B: 演卦仪式 -->
+        <div id="pageB" class="page flex-col items-center h-full py-8 px-6">
+            <div class="w-full flex justify-between items-center mb-8">
+                <button onclick="goToPage('pageA')" class="text-ink text-sm">取消</button>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">第 <span id="yaoCount">1</span> / 6 爻</p>
+                    <div class="w-32 h-1 bg-gray-200 rounded mt-1">
+                        <div id="progressBar" class="h-full bg-cinnabar rounded transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-400" id="timer">00:00</div>
+            </div>
+
+            <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex flex-col-reverse gap-1">
+                <div class="yao-slot" id="yaoSlot0"></div>
+                <div class="yao-slot" id="yaoSlot1"></div>
+                <div class="yao-slot" id="yaoSlot2"></div>
+                <div class="yao-slot" id="yaoSlot3"></div>
+                <div class="yao-slot" id="yaoSlot4"></div>
+                <div class="yao-slot" id="yaoSlot5"></div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center">
+                <div id="coinArea" class="relative cursor-pointer" onclick="castCoin()">
+                    <div id="coinsContainer" class="flex gap-4 hidden">
+                        <div id="coin0" class="coin coin-front">
+                            <span>陽</span>
+                        </div>
+                        <div id="coin1" class="coin coin-front">
+                            <span>陽</span>
+                        </div>
+                        <div id="coin2" class="coin coin-front">
+                            <span>陽</span>
+                        </div>
+                    </div>
+                    <div id="tapHint" class="text-center">
+                        <p class="text-gray-400 mb-2">第 <span id="currentYao">1</span> 爻</p>
+                        <p class="text-lg text-ink">点击起卦</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-4">
+                <p class="text-sm text-gray-500">铜钱翻转，阳多阴少</p>
+            </div>
+        </div>
+
+        <!-- 页面C: 化数加载 -->
+        <div id="pageC" class="page flex-col items-center justify-center h-full py-8 px-6">
+            <div id="collapseArea" class="relative w-full flex justify-center mb-12">
+                <div class="flex flex-col-reverse items-center gap-1" id="collapsingYao">
+                </div>
+                <div id="collapseCenter" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-ink rounded-full opacity-0"></div>
+            </div>
+
+            <div class="relative h-40 overflow-hidden w-full flex items-center justify-center">
+                <div id="numberStream" class="absolute inset-0 flex flex-wrap justify-center items-center opacity-20">
+                </div>
+                <div id="yiJingText" class="absolute inset-0 flex flex-wrap justify-center items-center opacity-10">
+                </div>
+                <div class="relative z-10 text-center">
+                    <p id="loadingText" class="loading-text ink-flow">AI 正在感应天机...</p>
+                    <div class="flex justify-center gap-1 mt-4">
+                        <span class="dot-pulse w-2 h-2 bg-ink rounded-full" style="animation-delay: 0s"></span>
+                        <span class="dot-pulse w-2 h-2 bg-ink rounded-full" style="animation-delay: 0.2s"></span>
+                        <span class="dot-pulse w-2 h-2 bg-ink rounded-full" style="animation-delay: 0.4s"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 h-40 overflow-hidden">
+                <svg class="w-full h-full" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="inkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#333;stop-opacity:0"/>
+                            <stop offset="100%" style="stop-color:#333;stop-opacity:0.5"/>
+                        </linearGradient>
+                        <filter id="blur">
+                            <feGaussianBlur stdDeviation="3"/>
+                        </filter>
+                    </defs>
+                    <rect id="inkRect" x="0" y="100%" width="100%" height="100%" fill="url(#inkGrad)" filter="url(#blur)"/>
+                </svg>
+            </div>
+
+            <div id="floatingDots" class="absolute inset-0 pointer-events-none">
+            </div>
+        </div>
+
+        <!-- 页面D: 得数结果 -->
+        <div id="pageD" class="page flex-col items-center justify-center h-full py-8 px-6">
+            <div id="resultPaper" class="paper-fall relative bg-gradient-to-b from-yellow-50 to-yellow-100 w-full max-w-xs p-6 shadow-2xl rounded-sm" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.04%22 numOctaves=%225%22/%3E%3CfeColorMatrix type=%22saturate%22 values=%220%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23noise)%22 opacity=%220.05%22/%3E%3C/svg%3E');">
+
+                <div class="absolute -top-4 -right-4 seal seal-bounce">
+                    <span id="guaName">晋</span>
+                </div>
+
+                <div class="text-center mb-4">
+                    <p class="text-xs text-gray-500 tracking-wider">本卦</p>
+                    <p class="text-2xl font-xiaowei text-ink tracking-widest" id="guaFullName">火地晋</p>
+                    <div class="flex justify-center mt-2" id="guaSymbols">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 my-4">
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-cinnabar to-transparent"></div>
+                    <span class="text-cinnabar text-xs">灵签</span>
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-cinnabar to-transparent"></div>
+                </div>
+
+                <div class="text-center mb-6 py-4 bg-ink/5 rounded">
+                    <p id="fortuneText" class="text-lg font-serif text-ink italic leading-relaxed">"离火照耀，守中获利"</p>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-xs text-gray-500 text-center mb-3 tracking-wider">推荐号码</p>
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="flex justify-center gap-2 flex-wrap" id="redBalls">
+                        </div>
+                        <div class="flex justify-center gap-2" id="blueBalls">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-6">
+                    <button onclick="restart()" class="btn-ghost flex-1 text-center py-3 text-sm tracking-wide">
+                        再卜一卦
+                    </button>
+                    <button onclick="shareResult()" class="btn-ghost flex-1 text-center py-3 text-sm tracking-wide flex items-center justify-center gap-2">
+                        <span>分享灵签</span>
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-8">易数乾坤 · AI辅助娱乐</p>
+        </div>
+
+        <!-- 合规声明弹窗 -->
+        <div id="riskModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-paper m-4 p-6 rounded-lg max-w-sm">
+                <h3 class="text-lg font-bold text-ink mb-4 text-center">风险声明</h3>
+                <div class="text-sm text-gray-600 leading-relaxed mb-6">
+                    <p class="mb-2">1. 本程序不保证中奖，仅供娱乐参考</p>
+                    <p class="mb-2">2. 禁止未成年人参与</p>
+                    <p class="mb-2">3. 理性购彩，量力而行</p>
+                    <p>4. 彩票结果为随机事件，本工具预测结果不具备任何科学依据</p>
+                </div>
+                <label class="flex items-start gap-2 mb-4 cursor-pointer">
+                    <input type="checkbox" id="riskCheckbox" class="mt-1 accent-cinnabar" onchange="toggleConfirmBtn()">
+                    <span class="text-sm text-gray-500">我已阅读并同意上述声明</span>
+                </label>
+                <button onclick="confirmRisk()" id="confirmBtn" disabled class="w-full py-3 bg-gray-300 text-gray-500 rounded font-bold tracking-wide transition-all">
+                    确认开始
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 全局状态
+        const state = {
+            currentPage: 'pageA',
+            lotteryType: 'ssq',
+            yaoResults: [],
+            isAnimating: false,
+            startTime: null,
+            timerInterval: null,
+            riskAccepted: false,
+            textInterval: null
+        };
+
+        const guaNames = [
+            { name: '大有', full: '火天大有' },
+            { name: '晋', full: '火地晋' },
+            { name: '乾', full: '乾为天' },
+            { name: '坤', full: '坤为地' },
+            { name: '屯', full: '水雷屯' },
+            { name: '蒙', full: '山水蒙' },
+            { name: '需', full: '水天需' },
+            { name: '讼', full: '天水讼' }
+        ];
+
+        const loadingTexts = [
+            'AI 正在感应天机...',
+            '解析卦象能量...',
+            '根据杀号规则排除极端组合...',
+            '数字命理推演中...',
+            '天机感应中...'
+        ];
+
+        // 页面切换
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            state.currentPage = pageId;
+        }
+
+        // 彩种切换
+        function switchLottery(type) {
+            document.querySelectorAll('.segment-item').forEach(btn => {
+                btn.classList.remove('active', 'text-cinnabar');
+                btn.classList.add('text-gray-400');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('active', 'text-cinnabar');
+            document.querySelector(`[data-type="${type}"]`).classList.remove('text-gray-400');
+            state.lotteryType = type;
+        }
+
+        // 合规声明勾选
+        function toggleConfirmBtn() {
+            const btn = document.getElementById('confirmBtn');
+            const checked = document.getElementById('riskCheckbox').checked;
+            if (checked) {
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-300', 'text-gray-500');
+                btn.classList.add('bg-cinnabar', 'text-white');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-gray-300', 'text-gray-500');
+                btn.classList.remove('bg-cinnabar', 'text-white');
+            }
+        }
+
+        // 显示合规弹窗
+        function showRiskModal() {
+            document.getElementById('riskModal').classList.remove('hidden');
+        }
+
+        // 确认合规
+        function confirmRisk() {
+            if (document.getElementById('riskCheckbox').checked) {
+                state.riskAccepted = true;
+                document.getElementById('riskModal').classList.add('hidden');
+                startDivination();
+            }
+        }
+
+        // 开始起卦
+        function startDivination() {
+            if (!state.riskAccepted) {
+                showRiskModal();
+                return;
+            }
+            
+            // 显示水墨扩散效果
+            showInkEffect();
+            
+            // 延迟进入演卦页面
+            setTimeout(() => {
+                resetDivinationState();
+                goToPage('pageB');
+                state.startTime = Date.now();
+                startTimer();
+            }, 600);
+        }
+
+        // 水墨扩散效果
+        function showInkEffect() {
+            const inkDrop = document.getElementById('inkDrop');
+            inkDrop.classList.remove('ink-spread');
+            inkDrop.style.width = '20px';
+            inkDrop.style.height = '20px';
+            inkDrop.style.opacity = '0.6';
+            
+            // 触发重排以重启动画
+            void inkDrop.offsetWidth;
+            
+            inkDrop.classList.add('ink-spread');
+            inkDrop.style.width = '400px';
+            inkDrop.style.height = '400px';
+        }
+
+        // 重置状态
+        function resetDivinationState() {
+            state.yaoResults = [];
+            state.isAnimating = false;
+            document.querySelectorAll('.yao-slot').forEach(slot => {
+                slot.innerHTML = '';
+                slot.className = 'yao-slot';
+            });
+            document.getElementById('coinsContainer').classList.add('hidden');
+            document.getElementById('tapHint').classList.remove('hidden');
+            document.getElementById('yaoCount').textContent = '1';
+            document.getElementById('currentYao').textContent = '1';
+            document.getElementById('progressBar').style.width = '0%';
+            // 重置所有铜钱为正面
+            for (let i = 0; i < 3; i++) {
+                const coin = document.getElementById(`coin${i}`);
+                coin.classList.remove('coin-back', 'coin-flipping');
+                coin.classList.add('coin-front');
+            }
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+            }
+        }
+
+        // 计时器
+        function startTimer() {
+            state.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+                const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+                const secs = String(elapsed % 60).padStart(2, '0');
+                document.getElementById('timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // 投掷铜钱（三枚）
+        function castCoin() {
+            if (state.isAnimating || state.yaoResults.length >= 6) return;
+            state.isAnimating = true;
+
+            const coinIndex = state.yaoResults.length;
+            const coinsContainer = document.getElementById('coinsContainer');
+            const tapHint = document.getElementById('tapHint');
+
+            tapHint.classList.add('hidden');
+            coinsContainer.classList.remove('hidden');
+
+            // 重置所有铜钱为正面
+            for (let i = 0; i < 3; i++) {
+                const coin = document.getElementById(`coin${i}`);
+                coin.classList.remove('coin-back', 'coin-flipping');
+                coin.classList.add('coin-front');
+            }
+
+            // 随机决定每枚铜钱的正反面
+            const coinResults = [Math.random() < 0.5, Math.random() < 0.5, Math.random() < 0.5];
+            
+            // 逐个开始翻转动画
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const coin = document.getElementById(`coin${i}`);
+                        coin.classList.add('coin-flipping');
+                        if (coinResults[i]) {
+                            coin.classList.remove('coin-front');
+                            coin.classList.add('coin-back');
+                            coin.querySelector('span').textContent = '陰';
+                        } else {
+                            coin.querySelector('span').textContent = '陽';
+                        }
+                    }, i * 100);
+                }
+            }, 100);
+
+            // 动画结束后记录结果
+            setTimeout(() => {
+                const yinCount = coinResults.filter(r => r).length;
+                let yaoType, yaoSymbol, yaoMark;
+                
+                if (yinCount === 0) {
+                    yaoType = 'old_yang';
+                    yaoSymbol = '—';
+                    yaoMark = '○';
+                } else if (yinCount === 1) {
+                    yaoType = 'yang';
+                    yaoSymbol = '—';
+                } else if (yinCount === 2) {
+                    yaoType = 'yin';
+                    yaoSymbol = '--';
+                } else {
+                    yaoType = 'old_yin';
+                    yaoSymbol = '--';
+                    yaoMark = '×';
+                }
+
+                state.yaoResults.push({ type: yaoType, symbol: yaoSymbol, mark: yaoMark });
+                updateYaoDisplay(coinIndex, yaoType);
+                state.isAnimating = false;
+
+                // 更新进度
+                const progress = (state.yaoResults.length / 6) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('yaoCount').textContent = Math.min(state.yaoResults.length + 1, 6);
+
+                if (state.yaoResults.length < 6) {
+                    document.getElementById('currentYao').textContent = state.yaoResults.length + 1;
+                    tapHint.classList.remove('hidden');
+                } else {
+                    // 全部完成，进入化数阶段
+                    setTimeout(() => {
+                        if (state.timerInterval) {
+                            clearInterval(state.timerInterval);
+                        }
+                        goToPageC();
+                    }, 1000);
+                }
+            }, 1300);
+        }
+
+        // 更新爻位显示
+        function updateYaoDisplay(index, result) {
+            const slot = document.getElementById(`yaoSlot${5 - index}`);
+            const yao = document.createElement('div');
+            let yaoClass = 'yao-yang';
+            if (result === 'yin' || result === 'old_yin') {
+                yaoClass = 'yao-yin';
+            }
+            if (result === 'old_yang') {
+                yaoClass += ' yao-old-yang';
+            } else if (result === 'old_yin') {
+                yaoClass += ' yao-old-yin';
+            }
+            yao.className = `yao-filled ${yaoClass} yao-rise`;
+            slot.className = 'yao-filled';
+            slot.appendChild(yao);
+        }
+
+        // 进入化数页面
+        function goToPageC() {
+            goToPage('pageC');
+            prepareCollapseAnimation();
+            startLoadingSequence();
+            animateInkRise();
+            createFloatingDots();
+            callAI();
+        }
+
+        // 准备坍缩动画
+        function prepareCollapseAnimation() {
+            const container = document.getElementById('collapsingYao');
+            container.innerHTML = '';
+
+            // 从结果反向显示爻
+            state.yaoResults.slice().reverse().forEach((result, i) => {
+                const yao = document.createElement('div');
+                let yaoClass = 'yao-yang';
+                if (result.type === 'yin' || result.type === 'old_yin') {
+                    yaoClass = 'yao-yin';
+                }
+                if (result.type === 'old_yang') {
+                    yaoClass += ' yao-old-yang';
+                } else if (result.type === 'old_yin') {
+                    yaoClass += ' yao-old-yin';
+                }
+                yao.className = `yao-filled ${yaoClass} yao-rise`;
+                yao.style.animationDelay = `${i * 0.1}s`;
+                container.appendChild(yao);
+            });
+
+            // 1.5秒后开始坍缩
+            setTimeout(() => {
+                container.classList.add('yao-collapse');
+                const center = document.getElementById('collapseCenter');
+                center.style.opacity = '1';
+                center.classList.add('fade-radial');
+            }, 1500);
+        }
+
+        // 加载序列
+        function startLoadingSequence() {
+            let textIndex = 0;
+            const loadingEl = document.getElementById('loadingText');
+
+            state.textInterval = setInterval(() => {
+                textIndex = (textIndex + 1) % loadingTexts.length;
+                loadingEl.textContent = loadingTexts[textIndex];
+            }, 800);
+
+            // 生成数字流动效果
+            generateNumberStream();
+            
+            // 生成易经文字
+            generateYiJingWords();
+        }
+
+        // 生成数字流动
+        function generateNumberStream() {
+            const container = document.getElementById('numberStream');
+            container.innerHTML = '';
+
+            const maxNum = state.lotteryType === 'ssq' ? 33 : 35;
+            const numbers = [];
+            
+            for (let i = 0; i < 30; i++) {
+                const num = String(Math.floor(Math.random() * maxNum) + 1).padStart(2, '0');
+                const span = document.createElement('span');
+                span.className = 'number-stream text-2xl font-bold text-ink/30';
+                span.textContent = num;
+                span.style.animationDelay = `${Math.random() * 3}s`;
+                span.style.left = `${Math.random() * 100}%`;
+                span.style.top = `${Math.random() * 100}%`;
+                span.style.position = 'absolute';
+                container.appendChild(span);
+            }
+        }
+
+        // 生成易经文字
+        function generateYiJingWords() {
+            const container = document.getElementById('yiJingText');
+            container.innerHTML = '';
+
+            const words = ['乾', '坤', '震', '巽', '坎', '离', '艮', '兑', '天', '地', '雷', '风', '水', '火', '山', '泽', '元', '亨', '利', '贞'];
+            
+            for (let i = 0; i < 15; i++) {
+                const span = document.createElement('span');
+                span.className = 'text-3xl font-serif text-ink/20 float-up';
+                span.textContent = words[Math.floor(Math.random() * words.length)];
+                span.style.animationDelay = `${Math.random() * 2}s`;
+                span.style.left = `${Math.random() * 100}%`;
+                span.style.top = `${100 + Math.random() * 50}%`;
+                span.style.position = 'absolute';
+                span.style.fontFamily = 'ZCOOL XiaoWei, serif';
+                container.appendChild(span);
+            }
+        }
+
+        // 墨迹上升动画
+        function animateInkRise() {
+            const inkRect = document.getElementById('inkRect');
+            inkRect.setAttribute('y', '100%');
+            
+            let progress = 0;
+            const animate = () => {
+                progress += 0.008;
+                const y = Math.max(0, 100 - progress * 100);
+                inkRect.setAttribute('y', `${y}%`);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            };
+            animate();
+        }
+
+        // 创建漂浮墨点
+        function createFloatingDots() {
+            const container = document.getElementById('floatingDots');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'absolute bg-ink/20 rounded-full float';
+                dot.style.width = `${4 + Math.random() * 8}px`;
+                dot.style.height = dot.style.width;
+                dot.style.left = `${Math.random() * 100}%`;
+                dot.style.top = `${Math.random() * 100}%`;
+                dot.style.animationDelay = `${Math.random() * 2}s`;
+                dot.style.animationDuration = `${2 + Math.random() * 2}s`;
+                container.appendChild(dot);
+            }
+        }
+
+        // 调用AI
+        async function callAI() {
+            const yaoData = state.yaoResults.map(r => r.type);
+            const lotteryType = state.lotteryType;
+            
+            const prompt = buildPrompt(yaoData, lotteryType);
+            
+            try {
+                const response = await fetch('https://api.siliconflow.cn/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sk-mwnoxgwjatmhsfavzmkeljbhnxmvmeealqadflhfkspqygwa'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-ai/DeepSeek-V4-Flash',
+                        messages: [
+                            { role: 'system', content: '你是一位精通易经和数字命理的大师，擅长根据卦象推演彩票号码。' },
+                            { role: 'user', content: prompt }
+                        ],
+                        temperature: 0.7
+                    })
+                });
+                
+                const data = await response.json();
+                handleAIResponse(data);
+            } catch (err) {
+                console.error('AI调用失败:', err);
+                useFallback();
+            }
+        }
+
+        // 构建prompt
+        function buildPrompt(yaoData, lotteryType) {
+            const typeName = lotteryType === 'ssq' ? '双色球' : '大乐透';
+            const redCount = lotteryType === 'ssq' ? 6 : 5;
+            const blueCount = lotteryType === 'ssq' ? 1 : 2;
+            const redMax = lotteryType === 'ssq' ? 33 : 35;
+            const blueMax = lotteryType === 'ssq' ? 16 : 12;
+            
+            return `根据以下信息进行易经卦象推演：
+            
+卦象数据：${yaoData.join(', ')}
+彩票类型：${typeName}
+规则要求：红球${redCount}个(1-${redMax}), 蓝球${blueCount}个(1-${blueMax})
+
+请以JSON格式输出：
+{
+  "fortune_comment": "12字以内的运势评语",
+  "fortune_explanation": "对运势评语的解释",
+  "raw_numbers": {
+    "red": [红球号码数组],
+    "blue": [蓝球号码数组]
+  }
+}
+
+注意：
+1. 红球号码需从小到大排序
+2. 号码不能重复
+3. 运势评语要符合易经卦象含义`;
+        }
+
+        // 处理AI响应
+        function handleAIResponse(data) {
+            try {
+                const content = data.choices[0]?.message?.content;
+                if (!content) {
+                    throw new Error('AI返回内容为空');
+                }
+                
+                const jsonStart = content.indexOf('{');
+                const jsonEnd = content.lastIndexOf('}') + 1;
+                const jsonStr = content.substring(jsonStart, jsonEnd);
+                const result = JSON.parse(jsonStr);
+                
+                processResult(result);
+            } catch (e) {
+                console.error('解析AI响应失败:', e);
+                useFallback();
+            }
+        }
+
+        // 处理结果
+        function processResult(result) {
+            const validatedResult = validateNumbers(result);
+            
+            if (state.textInterval) {
+                clearInterval(state.textInterval);
+            }
+            
+            setTimeout(() => {
+                goToPageD(validatedResult);
+            }, 500);
+        }
+
+        // 验证号码
+        function validateNumbers(result) {
+            let redNumbers = result.raw_numbers.red;
+            let blueNumbers = result.raw_numbers.blue;
+            
+            const lotteryType = state.lotteryType;
+            const redCount = lotteryType === 'ssq' ? 6 : 5;
+            const blueCount = lotteryType === 'ssq' ? 1 : 2;
+            const redMax = lotteryType === 'ssq' ? 33 : 35;
+            const blueMax = lotteryType === 'ssq' ? 16 : 12;
+            
+            redNumbers = [...new Set(redNumbers)]
+                .filter(n => n >= 1 && n <= redMax)
+                .sort((a, b) => a - b);
+            
+            blueNumbers = [...new Set(blueNumbers)]
+                .filter(n => n >= 1 && n <= blueMax)
+                .sort((a, b) => a - b);
+            
+            while (redNumbers.length < redCount) {
+                const num = Math.floor(Math.random() * redMax) + 1;
+                if (!redNumbers.includes(num)) {
+                    redNumbers.push(num);
+                }
+                redNumbers.sort((a, b) => a - b);
+            }
+            
+            while (blueNumbers.length < blueCount) {
+                const num = Math.floor(Math.random() * blueMax) + 1;
+                if (!blueNumbers.includes(num)) {
+                    blueNumbers.push(num);
+                }
+                blueNumbers.sort((a, b) => a - b);
+            }
+            
+            return {
+                fortune_comment: result.fortune_comment || '天机不可泄露',
+                fortune_explanation: result.fortune_explanation || '',
+                raw_numbers: {
+                    red: redNumbers.slice(0, redCount),
+                    blue: blueNumbers.slice(0, blueCount)
+                }
+            };
+        }
+
+        // 降级方案
+        function useFallback() {
+            console.log('使用降级方案生成号码');
+            
+            const lotteryType = state.lotteryType;
+            const redCount = lotteryType === 'ssq' ? 6 : 5;
+            const blueCount = lotteryType === 'ssq' ? 1 : 2;
+            const redMax = lotteryType === 'ssq' ? 33 : 35;
+            const blueMax = lotteryType === 'ssq' ? 16 : 12;
+            
+            const redNumbers = [];
+            let attempt = 0;
+            const maxAttempts = 100;
+            
+            while (redNumbers.length < redCount && attempt < maxAttempts) {
+                const tempNumbers = [];
+                while (tempNumbers.length < redCount) {
+                    const num = Math.floor(Math.random() * redMax) + 1;
+                    if (!tempNumbers.includes(num)) {
+                        tempNumbers.push(num);
+                    }
+                }
+                tempNumbers.sort((a, b) => a - b);
+                
+                if (validateNumberRules(tempNumbers)) {
+                    redNumbers.push(...tempNumbers);
+                    break;
+                }
+                attempt++;
+            }
+            
+            // 如果多次尝试失败，使用默认
+            if (redNumbers.length === 0) {
+                const fallback = lotteryType === 'ssq' ? [5, 12, 18, 22, 27, 31] : [5, 12, 18, 22, 27];
+                redNumbers.push(...fallback);
+            }
+            
+            const blueNumbers = [];
+            while (blueNumbers.length < blueCount) {
+                const num = Math.floor(Math.random() * blueMax) + 1;
+                if (!blueNumbers.includes(num)) {
+                    blueNumbers.push(num);
+                }
+            }
+            blueNumbers.sort((a, b) => a - b);
+            
+            const gua = guaNames[Math.floor(Math.random() * guaNames.length)];
+            const fortunes = [
+                '离火照耀，守中获利',
+                '坤舆载物，厚德载福',
+                '乾元用九，潜龙勿用',
+                '震雷动万物，春风吹又生',
+                '风生水起，财运亨通'
+            ];
+            const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+            
+            const fallbackResult = {
+                fortune_comment: fortune,
+                fortune_explanation: 'AI接口暂不可用，已使用本地算法生成',
+                raw_numbers: {
+                    red: redNumbers,
+                    blue: blueNumbers
+                },
+                guaName: gua.name,
+                guaFullName: gua.full
+            };
+            
+            if (state.textInterval) {
+                clearInterval(state.textInterval);
+            }
+            
+            setTimeout(() => {
+                goToPageD(fallbackResult);
+            }, 500);
+        }
+
+        // 验证号码规则
+        function validateNumberRules(numbers) {
+            const smallCount = numbers.filter(n => n <= 6).length;
+            if (smallCount >= 4) return false;
+            
+            const oddCount = numbers.filter(n => n % 2 === 1).length;
+            if (oddCount === 0 || oddCount === numbers.length) return false;
+            
+            const span = numbers[numbers.length - 1] - numbers[0];
+            if (span < 20 || span > 32) return false;
+            
+            const sum = numbers.reduce((a, b) => a + b, 0);
+            if (sum < 60 || sum > 150) return false;
+            
+            let consecutiveCount = 1;
+            for (let i = 1; i < numbers.length; i++) {
+                if (numbers[i] === numbers[i - 1] + 1) {
+                    consecutiveCount++;
+                    if (consecutiveCount >= 4) return false;
+                } else {
+                    consecutiveCount = 1;
+                }
+            }
+            
+            return true;
+        }
+
+        // 进入结果页面
+        function goToPageD(aiResult) {
+            goToPage('pageD');
+
+            const yaoSymbols = state.yaoResults.map(r => {
+                if (r.type === 'old_yang') return '—○';
+                if (r.type === 'old_yin') return '--×';
+                if (r.type === 'yang') return '—';
+                return '--';
+            });
+
+            let resultData;
+            if (aiResult && aiResult.raw_numbers) {
+                const gua = aiResult.guaName ? aiResult : guaNames[Math.floor(Math.random() * guaNames.length)];
+                resultData = {
+                    guaName: aiResult.guaName || gua.name,
+                    guaFullName: aiResult.guaFullName || gua.full,
+                    fortune: aiResult.fortune_comment || '天机不可泄露',
+                    redNumbers: aiResult.raw_numbers.red,
+                    blueNumbers: aiResult.raw_numbers.blue
+                };
+            } else {
+                const gua = guaNames[Math.floor(Math.random() * guaNames.length)];
+                const fortunes = [
+                    '离火照耀，守中获利',
+                    '坤舆载物，厚德载福',
+                    '乾元用九，潜龙勿用',
+                    '震雷动万物，春风吹又生',
+                    '风生水起，财运亨通'
+                ];
+                const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+                resultData = {
+                    guaName: gua.name,
+                    guaFullName: gua.full,
+                    fortune,
+                    redNumbers: [],
+                    blueNumbers: []
+                };
+            }
+
+            // 更新卦名
+            document.getElementById('guaName').textContent = resultData.guaName;
+            document.getElementById('guaFullName').textContent = resultData.guaFullName;
+
+            // 更新卦象符号
+            const symbolsContainer = document.getElementById('guaSymbols');
+            symbolsContainer.innerHTML = '';
+            yaoSymbols.forEach(symbol => {
+                const span = document.createElement('span');
+                span.className = 'text-xl mx-1';
+                span.textContent = symbol;
+                symbolsContainer.appendChild(span);
+            });
+
+            // 更新运势
+            document.getElementById('fortuneText').textContent = `"${resultData.fortune}"`;
+
+            // 更新号码球
+            updateBallDisplay(resultData);
+        }
+
+        // 更新球显示
+        function updateBallDisplay(resultData) {
+            const redContainer = document.getElementById('redBalls');
+            const blueContainer = document.getElementById('blueBalls');
+
+            redContainer.innerHTML = '';
+            blueContainer.innerHTML = '';
+
+            resultData.redNumbers.forEach((num, i) => {
+                const ball = document.createElement('div');
+                ball.className = 'ball ball-red number-appear';
+                ball.textContent = String(num).padStart(2, '0');
+                ball.style.animationDelay = `${i * 0.1 + 0.5}s`;
+                redContainer.appendChild(ball);
+            });
+
+            resultData.blueNumbers.forEach((num, i) => {
+                const ball = document.createElement('div');
+                ball.className = 'ball ball-blue number-appear';
+                ball.textContent = String(num).padStart(2, '0');
+                ball.style.animationDelay = `${(resultData.redNumbers.length + i) * 0.1 + 0.5}s`;
+                blueContainer.appendChild(ball);
+            });
+        }
+
+        // 重新开始
+        function restart() {
+            state.riskAccepted = false;
+            document.getElementById('riskCheckbox').checked = false;
+            document.getElementById('confirmBtn').disabled = true;
+            document.getElementById('confirmBtn').classList.add('bg-gray-300', 'text-gray-500');
+            document.getElementById('confirmBtn').classList.remove('bg-cinnabar', 'text-white');
+
+            // 重置结果页动画
+            const paper = document.getElementById('resultPaper');
+            paper.style.animation = 'none';
+            paper.offsetHeight; // 触发重排
+            paper.style.animation = '';
+
+            goToPage('pageA');
+        }
+
+        // 分享结果
+        function shareResult() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '易数乾坤 - 灵签分享',
+                    text: '我用易经起卦得到了一个好卦象，快来看看！',
+                    url: window.location.href
+                });
+            } else {
+                alert('请长按保存截图分享');
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 预热太极动画
+            const taiji = document.getElementById('taijiBtn');
+            taiji.classList.add('taiji-breath');
+        });
+    </script>
+</body>
+</html>

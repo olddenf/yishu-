@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/divination/divination",
+    "pages/loading/loading",
+    "pages/result/result"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#F2EFE6",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "易数乾坤",
+    "backgroundColor": "#F2EFE6",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

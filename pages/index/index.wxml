@@ -1,0 +1,60 @@
+<view class="container">
+    <view class="header">
+        <text class="title font-xiaowei">易数乾坤</text>
+        <text class="subtitle">AI起卦 · 命数推演</text>
+    </view>
+
+    <view class="lottery-selector">
+        <view class="segment-control">
+            <view 
+                class="segment-item {{lotteryType === 'ssq' ? 'active' : ''}}" 
+                bindtap="switchLottery" 
+                data-type="ssq">双色球</view>
+            <view 
+                class="segment-item {{lotteryType === 'dlt' ? 'active' : ''}}" 
+                bindtap="switchLottery" 
+                data-type="dlt">大乐透</view>
+        </view>
+    </view>
+
+    <view class="taiji-container">
+        <view class="taiji-btn taiji-breath" bindtap="startDivination">
+            <view class="ink-overlay">
+                <view class="ink-drop {{inkAnimating ? 'ink-spread' : ''}}"></view>
+            </view>
+            <image class="taiji-svg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5NSIgZmlsbD0iI0YyRUZENiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjMiLz48cGF0aCBkPSJNMTAwIDUgQTk1IDk1IDAgMCAxIDEwMCAxOTUgQTQ3LjUgNDcuNSAwIDAgMSAxMDAgMTAwIEE0Ny41IDQ3LjUgMCAwIDAgMTAwIDUiIGZpbGw9IiMzMzMiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI0Ny41IiByPSIxMiIgZmlsbD0iIzMzMyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjE1Mi41IiByPSIxMiIgZmlsbD0iI0YyRUZENiIvPjwvc3ZnPg==" mode="aspectFit">
+            </image>
+            <view class="taiji-glow cinnabar-glow"></view>
+        </view>
+    </view>
+
+    <view class="footer">
+        <text class="hint-text text-cinnabar animate-pulse">轻触太极，起卦问天</text>
+        <view class="risk-text">
+            <text>本程序不保证中奖，仅供娱乐参考</text>
+            <text>禁止未成年人购买彩票</text>
+        </view>
+    </view>
+
+    <view class="risk-modal {{showRiskModal ? 'show' : ''}}" catchtouchmove="preventTouchMove">
+        <view class="risk-modal-content">
+            <text class="risk-modal-title">风险声明</text>
+            <view class="risk-modal-body">
+                <text>1. 本程序不保证中奖，仅供娱乐参考</text>
+                <text>2. 禁止未成年人参与</text>
+                <text>3. 理性购彩，量力而行</text>
+                <text>4. 彩票结果为随机事件，本工具预测结果不具备任何科学依据</text>
+            </view>
+            <checkbox-group bindchange="onRiskConfirm">
+                <label class="risk-checkbox">
+                    <checkbox value="agree" color="#C04851"/>
+                    <text>我已阅读并同意上述声明</text>
+                </label>
+            </checkbox-group>
+            <button 
+                class="risk-confirm-btn {{riskChecked ? 'active' : ''}}" 
+                bindtap="confirmRisk"
+                disabled="{{!riskChecked}}">确认开始</button>
+        </view>
+    </view>
+</view>

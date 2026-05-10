@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="result-paper paper-fall">
+    <view class="seal seal-bounce">
+      <text>{{resultData.guaName}}</text>
+    </view>
+
+    <view class="gua-section">
+      <text class="gua-label">本卦</text>
+      <text class="gua-fullname">{{resultData.guaFullName}}</text>
+      <view class="gua-symbols">
+        <text wx:for="{{yaoSymbols}}" wx:key="index" class="symbol-text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="divider">
+      <view class="divider-line"></view>
+      <text class="divider-text">灵签</text>
+      <view class="divider-line"></view>
+    </view>
+
+    <view class="fortune-section">
+      <text class="fortune-text">"{{resultData.fortune}}"</text>
+    </view>
+
+    <view class="numbers-section">
+      <text class="numbers-label">推荐号码</text>
+      <view class="balls-area">
+        <view class="red-balls">
+          <view wx:for="{{resultData.redNumbers}}" wx:key="index" 
+                class="ball ball-red number-appear"
+                style="animation-delay: {{index * 0.1 + 0.5}}s;">
+            <text>{{item < 10 ? '0' + item : item}}</text>
+          </view>
+        </view>
+        <view class="blue-balls">
+          <view wx:for="{{resultData.blueNumbers}}" wx:key="index"
+                class="ball ball-blue number-appear"
+                style="animation-delay: {{(resultData.redNumbers.length + index) * 0.1 + 0.5}}s;">
+            <text>{{item < 10 ? '0' + item : item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-buttons">
+      <button class="btn-ghost" bindtap="restart">再卜一卦</button>
+      <button class="btn-ghost" open-type="share">分享灵签</button>
+    </view>
+  </view>
+
+  <text class="copyright">易数乾坤 · AI辅助娱乐</text>
+</view>
